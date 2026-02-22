@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - Patient Details</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            background: #e9e9e9;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* LEFT SIDE */
+        .left-side {
+            width: 35%;
+            background: #6EC1E4;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-big {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .left-side h1 {
+            font-size: 45px;
+            font-weight: 600;
+        }
+
+        .ecg-line {
+            width: 100px;
+            height: 3px;
+            background: white;
+            margin: 15px auto;
+        }
+
+        .left-side p {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        /* RIGHT SIDE FLOW */
+        .right-side {
+            width: 65%;
+            background: #fdfdfd;
+            padding: 50px 80px;
+            position: relative;
+            overflow-y: auto;
+            /* Allow scrolling for many fields */
+        }
+
+        .right-side h2 {
+            color: #0A3D62;
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-group.full-width {
+            grid-column: span 2;
+        }
+
+        .info-group label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .info-group input,
+        .info-group select,
+        .info-group textarea {
+            font-size: 16px;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .info-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .info-group input:focus,
+        .info-group select:focus,
+        .info-group textarea:focus {
+            outline: none;
+            border-color: #6EC1E4;
+            box-shadow: 0 0 8px rgba(110, 193, 228, 0.3);
+        }
+
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .save-btn {
+            padding: 15px 50px;
+            background: #6EC1E4;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .save-btn:hover {
+            background: #5aa8c5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        /* LOGO IMAGE ABSOLUTE */
+        .small-logo {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 70px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left-side">
+        <button onclick="goBack()"
+            style="position: absolute; left: 25px; top: 25px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 18px; border-radius: 20px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">&#8592;
+            Back</button>
+        <div>
+            <img src="/logo.png" class="logo-big" alt="SehatQure Logo">
+            <h1>SehatQure</h1>
+            <div class="ecg-line"></div>
+            <p>Every beat counts!</p>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <img src="/logo.png" class="small-logo" alt="Logo">
+
+        <h2>Patient Details</h2>
+
+        <form id="patientForm">
+            <!-- Grid for shorter fields -->
+            <div class="form-grid">
+                <div class="info-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="John Doe">
+                </div>
+
+                <div class="info-group">
+                    <label>Age</label>
+                    <input type="number" name="age" required placeholder="30">
+                </div>
+
+                <div class="info-group">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="info-group">
+                    <label>Blood Group</label>
+                    <select name="bloodGroup" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+
+                <div class="info-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" name="weight" placeholder="70" step="0.1" required>
+                </div>
+
+                <div class="info-group">
+                    <label>Height (cm)</label>
+                    <input type="number" name="height" placeholder="175" required>
+                </div>
+
+                <!-- Full width for longer text areas -->
+                <div class="info-group full-width">
+                    <label>Disability / Physical Limitations</label>
+                    <input type="text" name="disability" placeholder="None">
+                </div>
+
+                <div class="info-group full-width">
+                    <label>Allergies (Medications, Food, etc.)</label>
+                    <input type="text" name="allergies" placeholder="Penicillin, Peanuts...">
+                </div>
+
+                <div class="info-group full-width">
+                    <label>Past Surgeries</label>
+                    <input type="text" name="surgeries" placeholder="Appendectomy (2015)...">
+                </div>
+
+                <div class="info-group full-width">
+                    <label>Chronic Diseases</label>
+                    <input type="text" name="chronic" placeholder="Diabetes, Hypertension...">
+                </div>
+
+                <div class="info-group full-width">
+                    <label>Genetic Diseases (Family History)</label>
+                    <input type="text" name="genetic" placeholder="Heart disease...">
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="save-btn">Save & Continue</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Load Profile if Editing
+        const isEditing = localStorage.getItem("editingProfile");
+        if (isEditing === "true") {
+            const savedData = localStorage.getItem("userProfile");
+            if (savedData) {
+                const user = JSON.parse(savedData);
+                Object.keys(user).forEach(key => {
+                    const field = document.querySelector(`[name="${key}"]`);
+                    if (field) { field.value = user[key]; }
+                });
+            }
+            localStorage.removeItem("editingProfile");
+        }
+
+        // Save Form
+        document.getElementById('patientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Extract form data
+            const formData = new FormData(e.target);
+            const formValues = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/save-patient-details', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formValues)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save entire form locally
+                    localStorage.setItem("userProfile", JSON.stringify(formValues));
+                    transitionToPage('/upload.html');
+                } else {
+                    alert("Failed to save patient details");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error connecting to server");
+            }
+        });
+
+        // Page transition functionality
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+    </script>
+</body>
+
+</html>

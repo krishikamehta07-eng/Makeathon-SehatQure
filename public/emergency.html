@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - Emergency</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #ffeded;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* HEADER */
+        .header {
+            background: #FF5A5F;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+            /* makes the standard logo white */
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* MAIN EMERGENCY CONTAINER */
+        .emergency-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .sos-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            color: #D32F2F;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* NUMBERS GRID */
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .e-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.15);
+            border: 2px solid #ffcccc;
+            transition: all 0.3s ease;
+        }
+
+        .e-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(211, 47, 47, 0.25);
+            border-color: #FF5A5F;
+        }
+
+        .e-card h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .e-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #D32F2F;
+            margin-bottom: 20px;
+        }
+
+        .e-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #FF5A5F;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .e-btn:hover {
+            background: #D32F2F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header" style="position: relative;">
+        <button onclick="goBack()"
+            style="position: absolute; left: 25px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 18px; border-radius: 20px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">&#8592;
+            Back</button>
+        <div class="brand-container" style="margin-left: 90px;">
+            <img src="/logo.png" class="logo" alt="SehatQure Logo">
+            <span class="brand">SehatQure</span>
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-item">Dashboard</a>
+            <a href="/index.html" class="nav-item">Home</a>
+        </div>
+    </div>
+
+    <!-- EMERGENCY MAIN -->
+    <div class="emergency-container">
+
+        <div class="sos-icon">🚨</div>
+        <h1>EMERGENCY ASSISTANCE</h1>
+        <p>If this is a life-threatening medical emergency, call an ambulance immediately.</p>
+
+        <div class="emergency-grid">
+
+            <div class="e-card">
+                <h3>Ambulance</h3>
+                <div class="e-number">108</div>
+                <a href="tel:108" class="e-btn">Call Ambulance</a>
+            </div>
+
+            <div class="e-card">
+                <h3>Women Helpline</h3>
+                <div class="e-number">1091</div>
+                <a href="tel:1091" class="e-btn">Call Helpline</a>
+            </div>
+
+            <div class="e-card">
+                <h3>Police</h3>
+                <div class="e-number">100</div>
+                <a href="tel:100" class="e-btn">Call Police</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Page transition functionality
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    transitionToPage(href);
+                }
+            });
+        });
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+    </script>
+
+</body>
+
+</html>

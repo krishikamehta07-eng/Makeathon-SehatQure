@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #e9e9e9;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* HEADER */
+        .header {
+            background: #6EC1E4;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            margin-right: 15px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* DASHBOARD MAIN */
+        .dashboard-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #0A3D62;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        /* HOSPITAL FINDER */
+        .finder-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus,
+        textarea:focus {
+            border-color: #6EC1E4;
+            outline: none;
+            box-shadow: 0 0 8px rgba(110, 193, 228, 0.3);
+        }
+
+        .hospital-display {
+            margin-top: 20px;
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #d4eaf7;
+            display: none;
+            /* Shown dynamically */
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hospital-display h3 {
+            color: #0A3D62;
+            margin-bottom: 10px;
+        }
+
+        .call-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #FF5A5F;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .call-btn:hover {
+            background: #E0484D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 90, 95, 0.3);
+        }
+
+
+        /* CONSULT DOCTOR */
+        .specialty-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .spec-btn {
+            padding: 12px;
+            background: #f9f9f9;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .spec-btn:hover {
+            background: #f0f8ff;
+            border-color: #6EC1E4;
+        }
+
+        .spec-btn.active {
+            background: #6EC1E4;
+            color: white;
+            border-color: #6EC1E4;
+        }
+
+        .symptom-box {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .book-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .book-btn {
+            flex: 1;
+            padding: 14px;
+            background: #0A3D62;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background: #00223E;
+            transform: translateY(-2px);
+        }
+
+        .priority-badge {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            display: none;
+            /* Shown dynamically */
+            animation: fadeIn 0.4s ease;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #D32F2F;
+            border: 1px solid #ffcdd2;
+        }
+
+        .priority-mid {
+            background: #fff8e1;
+            color: #F57F17;
+            border: 1px solid #ffecb3;
+        }
+
+        .priority-low {
+            background: #e8f5e9;
+            color: #2E7D32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* PROFILE CARD */
+        .profile-card {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-details p {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .profile-details strong {
+            color: #0A3D62;
+        }
+
+        .qr-section {
+            text-align: center;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px dashed #e1e1e1;
+            margin-left: 30px;
+        }
+
+        .qr-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                grid-column: span 1;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .qr-section {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header" style="position: relative;">
+        <button onclick="goBack()"
+            style="position: absolute; left: 25px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 18px; border-radius: 20px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">&#8592;
+            Back</button>
+        <div class="brand-container" style="margin-left: 90px;">
+            <img src="/logo.png" class="logo" alt="SehatQure Logo">
+            <span class="brand">SehatQure</span>
+        </div>
+        <div class="nav-links">
+            <a href="/index.html" class="nav-item">Home</a>
+            <a href="#" class="nav-item nav-emergency">Emergency</a>
+            <a href="/chat.html" class="nav-item">AI Consult</a>
+        </div>
+    </div>
+
+    <!-- DASHBOARD MAIN -->
+    <div class="dashboard-container">
+
+        <!-- PROFILE AND QR CARD -->
+        <div class="card profile-card" id="profileCard" style="display: none;">
+            <div class="profile-details">
+                <h2>Patient Profile</h2>
+                <div id="profileInfo">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+            <div class="qr-section">
+                <img id="qrCodeImage" src="" alt="Patient QR Code">
+                <p style="font-size: 14px; color: #666;">Scan for Medical Record File</p>
+            </div>
+        </div>
+
+        <!-- HOSPITAL FINDER CARD -->
+        <div class="card">
+            <h2>Hospital Finder</h2>
+
+            <div class="finder-controls">
+                <div id="priorityDisplay" class="priority-badge">
+                    <!-- Priority Score Injected via JS -->
+                </div>
+
+                <label style="margin-top: 10px;">Select your area in Patiala:</label>
+                <select id="areaSelect" onchange="showHospital(this.value)">
+                    <option value="" disabled selected>-- Choose an Area --</option>
+                    <option value="modelTown">Model Town</option>
+                    <option value="urban1">Urban Estate Phase 1</option>
+                    <option value="urban2">Urban Estate Phase 2</option>
+                    <option value="tripuri">Tripuri</option>
+                    <option value="rajpura">Rajpura</option>
+                    <option value="sirhind">Sirhind Road</option>
+                </select>
+            </div>
+
+            <div id="hospitalDisplay" class="hospital-display">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- CONSULT DOCTOR CARD -->
+        <div class="card">
+            <h2>Consult Doctor</h2>
+
+            <label style="margin-bottom: 15px; display: block;">Select a Specialty:</label>
+            <div class="specialty-grid">
+                <button class="spec-btn" onclick="selectSpecialty(this, 'General Physician')">General Physician</button>
+                <button class="spec-btn" onclick="selectSpecialty(this, 'Cardiology')">Cardiology (Heart)</button>
+                <button class="spec-btn" onclick="selectSpecialty(this, 'Neurology')">Neurology (Brain)</button>
+                <button class="spec-btn" onclick="selectSpecialty(this, 'Pulmonology')">Pulmonology (Lungs)</button>
+                <button class="spec-btn" onclick="selectSpecialty(this, 'Dentistry')">Dentistry</button>
+                <button class="spec-btn" onclick="selectSpecialty(this, 'Pediatrics')">Pediatrics (Child)</button>
+            </div>
+
+            <div id="symptomBox" class="symptom-box">
+                <h3 id="specialtyTitle" style="color: #0A3D62; margin-bottom: 10px; font-size: 18px;">Consult</h3>
+                <label>Describe your symptoms:</label>
+                <textarea id="symptomText"
+                    placeholder="E.g., I have been experiencing a mild headache for 2 days..."></textarea>
+
+                <div class="book-controls">
+                    <button class="book-btn" onclick="bookAppointment('online')">Book Online Consult</button>
+                    <button class="book-btn" style="background:#6EC1E4;" onclick="bookAppointment('offline')">Book
+                        Offline Visit</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================= LOAD PROFILE & QR & PRIORITY =================
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem("userProfile");
+            let priorityScore = 30; // Default score
+
+            if (savedData) {
+                const user = JSON.parse(savedData);
+
+                // Show profile card
+                document.getElementById('profileCard').style.display = 'flex';
+
+                // Populate Profile Details
+                document.getElementById('profileInfo').innerHTML = `
+                    <p><strong>Name:</strong> ${user.name || 'Unknown'}</p>
+                    <p><strong>Age:</strong> ${user.age || 'N/A'} | <strong>Gender:</strong> ${user.gender || 'N/A'} | <strong>Blood Group:</strong> ${user.bloodGroup || 'N/A'}</p>
+                    <p><strong>Allergies:</strong> ${user.allergies || 'None'}</p>
+                    <p><strong>Chronic Conditions:</strong> ${user.chronic || 'None'}</p>
+                `;
+
+                // Generate QR Code (Encode unique data)
+                const qrData = encodeURIComponent(`Name:${user.name},Age:${user.age},BG:${user.bloodGroup}`);
+                document.getElementById('qrCodeImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+
+                // Priority Button Redirect Handling
+                const priorityContainer = document.getElementById('priorityDisplay');
+                priorityContainer.style.display = 'block';
+                priorityContainer.className = "priority-badge priority-mid";
+                priorityContainer.style.background = "#fff8e1";
+                priorityContainer.innerHTML = `
+                Not sure if it's an emergency? 
+                <br>
+                <a href="/priority.html" class="nav-item" style="display:inline-block; margin-top:10px; padding:10px 20px; background:#F57F17; color:white; border-radius:30px; text-decoration:none; font-size:16px;">
+                    🤖 Get AI Priority Score
+                </a>
+            `;
+
+                // Add click listener for smooth transition on this new dynamic button
+                setTimeout(() => {
+                    const aiBtn = priorityContainer.querySelector('a');
+                    if (aiBtn) {
+                        aiBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            transitionToPage('/priority.html');
+                        });
+                    }
+                }, 100);
+            }
+        });
+
+        // ================= HOSPITAL FINDER =================
+        function showHospital(area) {
+            const hospitalData = {
+                modelTown: { name: "Columbia Asia Hospital", phone: "0175-3989898" },
+                urban1: { name: "Rajindra Hospital", phone: "0175-2212012" },
+                urban2: { name: "Manipal Hospital Patiala", phone: "0175-5000000" },
+                tripuri: { name: "Deep Hospital", phone: "0175-2220000" },
+                rajpura: { name: "Apex Hospital", phone: "0175-3001234" },
+                sirhind: { name: "Grewal Hospital", phone: "0175-4005678" }
+            };
+
+            const hospital = hospitalData[area];
+            const displayDiv = document.getElementById("hospitalDisplay");
+
+            if (!hospital || !displayDiv) return;
+
+            displayDiv.style.display = "block";
+            displayDiv.innerHTML = `
+                <h3>${hospital.name}</h3>
+                <p><strong>Contact:</strong> ${hospital.phone}</p>
+                <a href="tel:${hospital.phone}" class="call-btn">
+                📞 Call Now
+                </a>
+            `;
+        }
+
+        // ================= CONSULT DOCTOR =================
+        function selectSpecialty(btn, spec) {
+            // UI Toggle
+            document.querySelectorAll('.spec-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Logic
+            localStorage.setItem("selectedSpecialty", spec);
+            document.getElementById("symptomBox").style.display = "block";
+            document.getElementById("specialtyTitle").innerText = "Consult " + spec;
+        }
+
+        function bookAppointment(type) {
+            const symptoms = document.getElementById("symptomText").value;
+            if (!symptoms) {
+                alert("Please describe your symptoms first so the doctor can prepare.");
+                document.getElementById("symptomText").focus();
+                return;
+            }
+
+            localStorage.setItem("symptoms", symptoms);
+
+            if (type === "online") {
+                alert("✅ Online appointment booked successfully! We will send a video link to your registered phone number shortly.");
+            } else {
+                alert("✅ Offline appointment booked successfully! Please visit the reception upon arrival.");
+            }
+
+            // Clear box styling
+            document.getElementById("symptomText").value = "";
+            document.getElementById("symptomBox").style.display = "none";
+            document.querySelectorAll('.spec-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        // ================= PAGE TRANSITIONS & NAV =================
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        document.querySelector('.nav-emergency').addEventListener('click', (e) => {
+            e.preventDefault();
+            transitionToPage('/emergency.html');
+        });
+
+        document.querySelectorAll('.nav-item:not(.nav-emergency)').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    transitionToPage(href);
+                }
+            });
+        });
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+    </script>
+
+</body>
+
+</html>

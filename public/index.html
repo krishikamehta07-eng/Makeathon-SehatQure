@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Background */
+        body {
+            height: 100vh;
+            background-image: url("https://previews.123rf.com/images/megaflopp/megaflopp1509/megaflopp150900042/44570840-male-medicine-doctor-holding-digital-tablet-pc-and-pointing-it-with-finger.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 0;
+        }
+
+        /* Navbar */
+        nav {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #0A3D62;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #6EC1E4;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #6EC1E4;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-top: 100px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 55px;
+            font-weight: 600;
+            color: #0A3D62;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-size: 35px;
+            font-weight: 400;
+            color: #0A3D62;
+            margin-bottom: 40px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 280px;
+            margin: 20px auto;
+            padding: 16px;
+            border: none;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #6EC1E4;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background: #5aa8c5;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Logo */
+        .logo {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 120px;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome To SehatQure</h1>
+        <h2>Are you a</h2>
+        <!-- We'll add IDs to these buttons to link them to JS logic later -->
+        <button class="btn" id="patientBtn">Patient</button>
+        <button class="btn" id="doctorBtn">Doctor</button>
+    </div>
+
+    <!-- Put your logo file in same folder and use file name only -->
+    <img src="/logo.png" class="logo" alt="SehatQure Logo">
+
+    <script>
+        // Page transition fade in on load
+        document.body.style.opacity = '1';
+
+        // Function to handle smooth page transition
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300); // Wait for fade out to complete (300ms)
+        }
+
+        // Link to patient login
+        document.getElementById('patientBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            transitionToPage('/patient-login.html');
+        });
+
+        // Link doctor login
+        document.getElementById('doctorBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            transitionToPage('/doctor-login.html');
+        });
+
+        // Intercept navigation links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    transitionToPage(href);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

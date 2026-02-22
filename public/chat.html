@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - AI Consult</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #e9e9e9;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* HEADER */
+        .header {
+            background: #6EC1E4;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            margin-right: 15px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* MAIN CHAT AREA */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR - BODY PARTS */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #0A3D62;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 500;
+            border-bottom: 2px solid #e1e1e1;
+            padding-bottom: 10px;
+        }
+
+        .specialty-btn {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .specialty-btn:hover {
+            background: #f0f8ff;
+            border-color: #6EC1E4;
+            transform: translateX(5px);
+        }
+
+        .specialty-btn.active {
+            background: #6EC1E4;
+            color: white;
+            border-color: #6EC1E4;
+        }
+
+        /* CHAT BOX */
+        .chat-box {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #fdfdfd;
+            padding: 20px;
+            border-bottom: 1px solid #e1e1e1;
+            display: flex;
+            align-items: center;
+        }
+
+        .brain-icon {
+            font-size: 28px;
+            margin-right: 15px;
+        }
+
+        .chat-title {
+            color: #0A3D62;
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* MESSAGE BUBBLES */
+        .message {
+            max-width: 75%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .msg-ai {
+            align-self: flex-start;
+            background: #f0f8ff;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            border: 1px solid #e1f0fa;
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: #6EC1E4;
+            color: white;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 10px rgba(110, 193, 228, 0.2);
+        }
+
+        /* INPUT AREA */
+        .chat-input-container {
+            padding: 20px;
+            background: #fdfdfd;
+            border-top: 1px solid #e1e1e1;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #6EC1E4;
+            box-shadow: 0 0 8px rgba(110, 193, 228, 0.3);
+        }
+
+        .send-btn {
+            background: #0A3D62;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #00568c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(10, 61, 98, 0.2);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* TYPING INDICATOR */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: #f0f8ff;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #6EC1E4;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header" style="position: relative;">
+        <button onclick="goBack()"
+            style="position: absolute; left: 25px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 18px; border-radius: 20px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">&#8592;
+            Back</button>
+        <div class="brand-container" style="margin-left: 90px;">
+            <img src="/logo.png" class="logo" alt="SehatQure Logo">
+            <span class="brand">SehatQure AI</span>
+        </div>
+        <div class="nav-links">
+            <a href="/index.html" class="nav-item">Home</a>
+            <a href="#" class="nav-item">Logout</a>
+        </div>
+    </div>
+
+    <div class="chat-container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h3>Consult Area</h3>
+            <button class="specialty-btn active" data-part="general">General Physician</button>
+            <button class="specialty-btn" data-part="heart">Cardiology (Heart)</button>
+            <button class="specialty-btn" data-part="lungs">Pulmonology (Lungs)</button>
+            <button class="specialty-btn" data-part="brain">Neurology (Brain)</button>
+            <button class="specialty-btn" data-part="dentist">Dentistry</button>
+            <button class="specialty-btn" data-part="pediatric">Pediatrics (Child)</button>
+            <button class="specialty-btn" data-part="gynaec">Gynecology</button>
+            <button class="specialty-btn" data-part="ophthal">Ophthalmology (Eye)</button>
+        </div>
+
+        <!-- CHAT BOX -->
+        <div class="chat-box">
+            <div class="chat-header">
+                <span class="brain-icon">🩺</span>
+                <span class="chat-title" id="chatTitle">General Physician AI</span>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message msg-ai">
+                    Hello! I'm your SehatQure General Physician AI. How can I help you today?
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <form class="chat-input-container" id="chatForm">
+                <input type="text" class="chat-input" id="messageInput"
+                    placeholder="Type your symptoms or questions here..." required autocomplete="off">
+                <button type="submit" class="send-btn" id="sendBtn">Send</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // State
+        let currentSpecialty = "general";
+
+        // Setup UI
+        const messagesContainer = document.getElementById('chatMessages');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatTitle = document.getElementById('chatTitle');
+
+        // Specialty Selection
+        document.querySelectorAll('.specialty-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Update active state
+                document.querySelectorAll('.specialty-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update state and UI
+                currentSpecialty = btn.getAttribute('data-part');
+                chatTitle.innerText = btn.innerText + " AI";
+
+                // Add system message
+                addMessage(`Switched to ${btn.innerText}. How can I assist you with this?`, 'ai');
+            });
+        });
+
+        // Handle Chat Submit
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // 1. Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+
+            // 2. Show loading state
+            sendBtn.disabled = true;
+            typingIndicator.style.display = 'block';
+            messagesContainer.appendChild(typingIndicator); // Move to bottom
+            scrollToBottom();
+
+            // 3. Call API
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        bodyPart: currentSpecialty
+                    })
+                });
+
+                const data = await response.json();
+
+                // 4. Hide loading & Show response
+                typingIndicator.style.display = 'none';
+                sendBtn.disabled = false;
+
+                addMessage(data.reply, 'ai');
+
+            } catch (err) {
+                console.error(err);
+                typingIndicator.style.display = 'none';
+                sendBtn.disabled = false;
+                addMessage("Sorry, I'm having trouble connecting right now. Please try again later.", 'ai');
+            }
+
+            // Refocus input
+            messageInput.focus();
+        });
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message msg-${sender}`;
+            // Replace newlines with <br> for simple formatting
+            div.innerHTML = text.replace(/\n/g, '<br>');
+
+            // Insert before typing indicator
+            messagesContainer.insertBefore(div, typingIndicator);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Page transition functionality
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        // Intercept navigation links
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    transitionToPage(href);
+                }
+            });
+        });
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+    </script>
+
+</body>
+
+</html>

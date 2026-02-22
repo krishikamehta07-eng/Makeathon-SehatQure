@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - AI Priority Analysis</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #e9e9e9;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background: #6EC1E4;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            margin-right: 15px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* MAIN */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0A3D62;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6EC1E4;
+            box-shadow: 0 0 8px rgba(110, 193, 228, 0.3);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 15px;
+            background: #0A3D62;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .analyze-btn:hover {
+            background: #00223E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .analyze-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* RESULTS SECTION */
+        .results-section {
+            display: none;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .result-text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #6EC1E4;
+            font-weight: 500;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #6EC1E4;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: #0A3D62;
+            text-decoration: underline;
+        }
+
+        /* AMBULANCE ALERT */
+        .ambulance-alert {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #ffebee;
+            color: #D32F2F;
+            border: 2px solid #D32F2F;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header" style="position: relative;">
+        <button onclick="goBack()"
+            style="position: absolute; left: 25px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 18px; border-radius: 20px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">&#8592;
+            Back</button>
+        <div class="brand-container" style="margin-left: 90px;">
+            <img src="/logo.png" class="logo" alt="SehatQure Logo">
+            <span class="brand">SehatQure</span>
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-item">Dashboard</a>
+            <a href="/index.html" class="nav-item">Home</a>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div class="main-container">
+        <div class="card">
+            <h2>AI Priority Analysis</h2>
+            <p>Describe your symptoms in detail and our medical AI will assign a triage priority score to help you
+                understand the urgency of your condition.</p>
+
+            <textarea id="symptomsInput"
+                placeholder="E.g., I have sharp chest pain that started 30 minutes ago, radiating to my left arm. I am sweating and feel short of breath..."></textarea>
+
+            <button class="analyze-btn" id="analyzeBtn" onclick="analyzeSymptoms()">Analyze Symptoms</button>
+            <div id="loading" class="loading">Analyzing your symptoms... Please wait.</div>
+
+            <div id="resultsSection" class="results-section">
+                <div id="scoreCircle" class="score-circle">--</div>
+                <div id="resultText" class="result-text"></div>
+
+                <div id="ambulanceAlert" class="ambulance-alert">
+                    🚨 URGENT: Priority Score > 70 detected. Automatically notifying the nearest hospital to dispatch an
+                    ambulance to your location...
+                </div>
+
+                <a href="/dashboard.html" class="back-btn nav-item">← Back to Dashboard</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Page transition functionality
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    transitionToPage(href);
+                }
+            });
+        });
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+
+        // AI Analysis Logic
+        async function analyzeSymptoms() {
+            const symptoms = document.getElementById('symptomsInput').value.trim();
+            if (!symptoms) {
+                alert("Please describe your symptoms first.");
+                return;
+            }
+
+            const btn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            const resultsSection = document.getElementById('resultsSection');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            resultsSection.style.display = 'none';
+
+            try {
+                const response = await fetch('/analyze-priority', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symptoms })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data.score, data.analysis);
+                } else {
+                    alert(data.error || "Failed to analyze symptoms.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error connecting to the AI server.");
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(score, analysis) {
+            const scoreCircle = document.getElementById('scoreCircle');
+            const resultText = document.getElementById('resultText');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Set text
+            scoreCircle.innerText = score;
+            // Handle markdown-like formatting briefly if AI returns it
+            let formattedText = analysis.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            resultText.innerHTML = formattedText;
+
+            // Set color and trigger actions based on score
+            const ambulanceAlert = document.getElementById('ambulanceAlert');
+            ambulanceAlert.style.display = 'none'; // reset on each run
+
+            if (score > 70) {
+                scoreCircle.style.background = '#D32F2F'; // Red - High Urgency
+
+                // Trigger ambulance dispatch simulation
+                setTimeout(() => {
+                    ambulanceAlert.style.display = 'block';
+                }, 800);
+            } else if (score >= 40) {
+                scoreCircle.style.background = '#F57F17'; // Yellow/Orange - Medium
+            } else {
+                scoreCircle.style.background = '#2E7D32'; // Green - Low
+            }
+
+            resultsSection.style.display = 'block';
+        }
+
+    </script>
+</body>
+
+</html>

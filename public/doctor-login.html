@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SehatQure - Doctor Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #e9e9e9;
+
+            /* Page Transition base */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* HEADER */
+        .header {
+            background: #6EC1E4;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo {
+            width: 60px;
+            vertical-align: middle;
+        }
+
+        .brand {
+            font-size: 28px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* MAIN */
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 85vh;
+        }
+
+        .box {
+            background: white;
+            padding: 50px;
+            width: 450px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #0A3D62;
+            font-weight: 500;
+        }
+
+        /* INPUT */
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #6EC1E4;
+            outline: none;
+            box-shadow: 0 0 8px rgba(110, 193, 228, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background: #6EC1E4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: #5aa8c5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0A3D62;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="brand-container" style="display: inline-block;">
+            <img src="/logo.png" class="logo" alt="SehatQure Logo">
+            <span class="brand">SehatQure</span>
+        </div>
+    </div>
+
+    <!-- ABSOLUTE BACK BUTTON -->
+    <button onclick="goBack()"
+        style="position: absolute; top: 20px; left: 20px; background: white; border: 2px solid #e1e1e1; color: #555; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; z-index: 100;">&#8592;</button>
+
+    <div class="main">
+
+        <div class="box">
+            <h2>Doctor Portal Login</h2>
+
+            <form id="doctorLoginForm">
+                <div class="input-group">
+                    <label>Hospital ID</label>
+                    <input type="text" id="hospitalId" placeholder="Enter Hospital ID" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Doctor ID</label>
+                    <input type="password" id="doctorId" placeholder="Enter Doctor ID" required>
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+
+            <a href="/index.html" class="back-link">Back to Home</a>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('doctorLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const hospitalId = document.getElementById('hospitalId').value;
+            const doctorId = document.getElementById('doctorId').value;
+
+            try {
+                const response = await fetch('/doctor-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ hospitalId, doctorId })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Redirect to chat/dashboard for doctors
+                    transitionToPage('/chat.html');
+                } else {
+                    alert(data.message || "Invalid Credentials");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error connecting to server");
+            }
+        });
+
+        // Page transition functionality
+        document.body.style.opacity = '1';
+
+        function transitionToPage(url) {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        // Intercept back link
+        document.querySelector('.back-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            transitionToPage('/index.html');
+        });
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) document.body.style.opacity = '1';
+        });
+
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '/index.html';
+                }
+            }, 300);
+        }
+    </script>
+
+</body>
+
+</html>
